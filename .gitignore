@@ -1,0 +1,4 @@
+packer_cache
+output-ubuntu-20-04-LTS
+packer_ubuntu-20-04-LTS_virtualbox.box
+.vagrant
