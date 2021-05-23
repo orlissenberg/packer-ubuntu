@@ -16,8 +16,8 @@ autoinstall:
     variant: us
   identity:
     hostname: ubuntu-packer
-    username: ubuntu
-    password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+    username: vagrant
+    password: "$6$FhcddHFVZ7ABA4Gi$wlcOBmU0zNrMoOQy/N.jzGMgqo74AcJBAZsyoKHvp9qSZLysCCKYBn9IfKFPcSF6ueQODcbyJTkDqvXdZyMgi1"
   ssh:
     install-server: yes
     allow-pw: yes
@@ -26,6 +26,6 @@ autoinstall:
   user-data:
     disable_root: false 
   late-commands:
-    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
     - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 ipv6.disable=1 biosdevname=0"/' /target/etc/default/grub
     - curtin in-target --target /target update-grub2

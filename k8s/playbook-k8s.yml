@@ -1,0 +1,37 @@
+---
+# ansible-playbook playbook-k8s.yml -i ../hosts --private-key ../.vagrant/machines/default/virtualbox/private_key
+# ansible-galaxy install geerlingguy.docker -p ./roles
+# ansible-galaxy install geerlingguy.kubernetes -p ./roles
+
+- hosts: webservers
+  gather_facts: yes
+  become: yes
+
+  pre_tasks:
+    # https://github.com/geerlingguy/ansible-role-kubernetes/issues/105
+    - script: ./install-k8s-repo.sh
+    
+    # sudo systemctl list-units --type=service
+    # journalctl -u kubelet
+    # Failed to run Kubelet: running with swap on is not supported!
+    - shell: swapoff -a
+
+    # https://docs.ansible.com/ansible/2.3/copy_module.html
+    - copy:
+        src: kube-flannel.yaml
+        dest: /opt/kube-flannel.yaml
+
+  vars:
+    kubernetes_apiserver_advertise_address: '192.168.42.42'
+    kubernetes_allow_pods_on_master: true
+    kubernetes_apt_ignore_key_error: true
+    kubernetes_enable_web_ui: false
+    kubernetes_flannel_manifest_file: /opt/kube-flannel.yaml
+
+    # kubernetes_pod_network:
+    #   cni: 'calico'
+    #   cidr: '192.168.0.0/16'
+
+  roles:
+    - geerlingguy.docker
+    - geerlingguy.kubernetes
